@@ -1,0 +1,1138 @@
+login  => play with Docker 
+	start => new instance  alt+enter
+
+
+hub.docker.com => push your own docker image 
+
+
+
+
+hub.docker.com   => search ubuntu image  
+	cmd => docker pull ubuntu 
+	alernatively => docker run ubuntu 
+
+=========================================================================
+
+docker Container manage : 
+-------------------------
+
+#docker run -it ubuntu  =>  create and  run ubuntu container inractively 
+#docker ps -a   => list the avalible containers
+#docker start -i <id>   => run a particular container id (1st 3 digit ) 
+#docker rm <id>   => remove container  id 
+#docker images => to list repositiory images 
+
+clone container : 
+-----------------
+docker commit <container_id> repository:tagname    
+
+#look repo  --->   $  docker images 
+
+#docker run -it <image_id> /bin/bash
+#docker ps -a
+
+#docker start <container_id>
+#docker exec -it <container_id> bash
+
+
+
+ (--or--) 
+
+
+#docker start -i <container_id>
+
+remove docker images repository : 
+---------------------------------
+#docker rmi repo_name:tagname 
+
+==========================================================================
+
+
+it will open ubuntu shell prompt 
+
+
+to run history of command dependent on the command number is 
+!2   or   !command number 
+
+
+  apt     to list the commands 
+  apt update 
+ apt install nano 
+
+
+ctrl + l    => clear terminal
+apt remove nano 
+
+======================================================================
+
+copy file data :
+----------------
+ 
+#cat file1 file2 > file3  =>    copy data from 2 files and moved into file3
+#rm -r                    =>    remove directory
+#echo data= sanjay >> file3.txt  => append data in file
+#echo db_sanjay=souths  >> .bashrc 
+
+# bc >  output.log 2> error.log    
+# echo "hello" | md5    1st output send in to second one input 
+===============================================================
+
+view a file : 
+--------------
+
+#more  => see large text file  in % format 
+#less  => see larger text file  use arrow key of top and bottom 
+#head -n 5 /etc/adduser.conf   => see 1st 5 lines 
+#tail  -n 5 /etc/adduser.conf   => last 5 lines 
+
+============================================================
+
+search word in textfile :
+-------------------------
+
+#grep -r -i king sample.txt     => search text in file 
+	-i = case insensitive	 -r = subdirectory 
+#grep -r -i king *  => search all files and all sub directory 
+
+or 
+
+#grep -ri king *     => combine all options 
+
+==============================================================
+
+Finding Files and directories :
+-------------------------------
+
+#find -type f -name "db_*" 
+#find -type f -name "*.py" => find all .py file 
+#find -type f -iname "File.py"  => case insensitive  to find files
+
+    
+
+#find / -type f -iname "*.py" > data.txt   find all py file in root  and store in data.txt
+ 
+
+===================================================================
+
+chaining command :
+------------------
+
+#mkdir text ; cd text ; echo dart  =>  execute same command remaing 2 command is work  1 error 
+
+#mkdir text && cd text &&  echo dart =>  if 1 command is failed remaining also failed 
+
+#mkdir text || echo "directory already Exists"
+
+ls /bin | head 
+ls /bin | less
+ls /bin | head -n 5 
+
+
+break command in multiple lines 
+-------------------------------
+mkdir text;/
+cd text;/
+echo done
+
+
+
+===================================================================
+
+Environment variables :
+-----------------------
+
+#printenv
+
+echo $PATH  ; echo $HOSTNAME
+
+#printenv path
+
+ #set env variable       export db_sanjay=souths
+
+
+after restart it will not there    we make it as stable
+
+nano .bashrc   add the variable  
+
+#echo db_sanjay=souths  >> .bashrc 
+
+#export data=sanjay
+#source .bashrc or source ~/.bashrc
+
+====================================================================
+
+managing process :
+------------------
+sleep 10  => terminal sleep 10 seconds 
+#sleep 100 &   => it run sleep process in background 
+ps  => look process 
+
+#kill ps_id  => kill Process
+
+=====================================================================
+
+managing users:
+---------------
+useradd => adding  , usermod => modifing  , userdel => deleting 
+
+#useradd  -> to check options 
+
+olderversion of add user : 
+--------------------------
+
+#useradd -m john   -> create user 
+#cat /etc/passwd   -> user account info 
+
+add zsh shell to john :
+----------------------
+# apt install zsh 
+# usermod -s /bin/zsh john
+# cat /etc/passwd
+
+
+login as particular user in container : 
+--------------------------------------
+#docker ps  => running dockers 
+#docker exec -it -u john  <container_id> zsh    login with zsh 
+#docker exec -it -u john  <container_id> bash    login with bash 
+
+upgrade version of add user : 
+------------------------------
+#adduser bobby
+
+======================================================================
+
+managing groups :
+------------------
+
+#groupadd developers  => create new group 
+#cat  /etc/group
+#usermod -G developers john  => adding users in groups 
+
+#cat /etc/passwd | grep john
+or 
+#grep john /etc/passwd 
+
+#groups john    => it show 2 groups default (primary user group) and n number of suplmentarty groups
+		(john , developers)
+
+=========================================================================
+
+File Permissions : 
+------------------
+#echo echo hello > shell.sh
+ls -l
+#./shell.sh  -> permission denied 
+
+change Permissions :  user => u gropus => g   others => o 
+
+#chmod u+x shell.sh     add executable permission to user
+#chmod u-r-w shell.sh    remove read and write permissions 
+
+#chmod o+r-w           remove write and add read permission to others 
+#chmod og-r+w          remove read and add write permission to others , groups  
+
+#chmod 000 shell.sh    remove all permissions 
+#chmod 777 shell.sh    add all permissions to all peoples 
+
+==============================================================================
+===============================================================================
+
+
+
+
+react app images build : 
+------------------------
+#Dockerfile   
+#FROM node:current-alpine3.18
+
+
+npm install  -> to install dependencies of react app 
+# docker build -t react-app .  -> react-app is repository name
+# docker image ls   || docker images 
+# docker run -it react-app  - it directly run node 
+# docker run -it react-app  bash   -> bash is not present in alpine os 
+# docker run -it react-app sh    
+
+
+===========================================================================
+
+
+copying files and Directories :
+-------------------------------
+
+FROM node:current-alpine3.18
+
+WORKDIR /app 
+
+COPY . .
+
+# COPY . .  copy all files local to WORKDIR /app/      because we set workdir 
+
+# COPY ["hello world.txt","/app"]
+
+# ADD file.zip .      it unzip and copy file to app folder    add url also         copy cmd is straight way to copy files it wont unzip
+
+rebuild image  docker build -t react-app .
+
+run docker image : 
+------------------
+
+	docker run -it react-app sh 
+ # it will directly run sh in location  app folder
+ 
+# check        Transferring Context :......  while creating build 
+
+
+
+
+exclude directories and files : 
+-------------------------------
+
+#create  .dockerignore 
+
+#in file    node_module       -> it will ignore node_module directory  
+				this directory contains all node dependencies of  projects 
+
+ 
+
+give the  directory_name or files  name  that are to be excluded while creating build 
+
+
+RUNning Command : 
+-------------------
+
+while create a image it will download and install  node dependencies  
+
+# ->   RUN  npm install     
+									--------------------
+
+rebuild image
+  
+
+Environment Setup :
+-------------------
+frontend need api or  backend to get data   using 
+
+#  ENV   API_URL=http://api.myapp.com/
+
+rebuild image 
+#rerun  and check   $ printenv
+
+
+Exposing Ports : 
+-----------------
+npm start     it will start localhost:3000  port working   it will came local computer
+
+# EXPOSE  3000   it will open port 3000 in container 
+
+
+Setting the  Users : 
+---------------------
+
+in docker we have direct root access so we can access security  so we create 
+user with limited permissions 
+
+
+# USER addgroup app && adduser -S -G app app 
+  create group app     -G = primary group , -S system user  username =app
+
+# groups app
+
+
+Defining  EntryPoints :
+------------------------
+RUN ===>> command use while creating a image -> npm install 
+CMD ===>> used to while running a container 
+
+
+while starting a server at command run time like 
+
+docker run react-app npm start 
+
+if you create a user at last step of dockerfile  the dependencies are install
+in root 
+so we create a user before install a dependencies
+
+# FROM node:current-alpine3.17
+
+# RUN addgroup app &&  adduser -S -G app app 
+
+# USER app
+ 
+# WORKDIR /app 
+
+# COPY . .
+
+# RUN npm install 
+
+
+each and every time we use  docker run react-app npm start 
+
+so we use CMD 
+
+# CMD  ["npm","start"]   -> executable form       prefered 
+# CMD npm start  -> shell form  it will execute new shell  and   it take more time
+you can also use 
+
+# ENTRYPOINT
+
+Speed up images build : 
+-----------------------
+
+
+
+# COPY package*.json .
+
+# RUN npm install 
+
+# COPY . .
+
+
+
+Removing Images  and Containers : 
+---------------------------------
+
+
+docker images 
+
+none none   -> dangling images 
+
+# docker images purne       -> incase if nothing deleted , containers are runnning background 
+
+# docker container purne    -> to remove stopped  container 
+   important contianer you start it then use the command otherwise it remove all container
+
+docker ps -a   
+
+# docker images purne 
+
+docker image rm <name> or <image_id> 
+
+docker rm <container_id> <container_id>
+
+
+Tagging Images : 
+-----------------
+
+# docker images 
+
+tags are denoted as latest     if we move to production it always look as latest
+we can modify tag name 
+
+tag names denoted as  -> build number , 3.4.2 like versions , code name like buster , strawberry      
+
+# docker build -t reast-app:100 . 
+
+by using this image id are look like as same  
+
+so we can use appname:tagname to remove image 
+
+
+# docker image remove react-app:100
+ 
+
+# docker image tag react-app:latest  react-app:1
+the latest image always point to version 1 tagname
+
+make new change in app 
+
+# docker build -t react-app:2 .         -> image_id b06....
+# docker image tag b06 react-app:latest 
+
+docker images
+
+
+Sharing Images : 
+-----------------
+
+hub.docker.com  -> create accounut -> create new repository  ==>   react-app
+
+repository name ->  sanjaykumarsr/react-app
+
+# docker images
+
+# docker image tag <img_id> sanjaykumarsr/react-app:tag
+
+# docker images 
+
+repository name you see the image_is are same 
+
+
+# docker login   
+	username , password 
+
+# docker push sanjaykumarsr/react-app:tag 
+
+
+go and see in hub.docker.com 
+
+make small chage incode 
+
+# docker build -t react-app:tag1
+
+# docker images 
+
+# docker image tag react-app:tag1  sanjaykumarsr/react-app:tag1
+
+# docker push sanjaykumarsr/react-app:tag1
+
+   look this some of the layers are already exists  it make more speed 
+
+
+Saving and Loading Images : 
+---------------------------
+
+we can compress the image file and load it in another machine 
+
+# docker image save -o react-app.tar react-app:tag1
+
+
+another machine :
+
+# docker image load -i react-app.tar
+
+# docker images 
+
+
+=====================================================================================
+
+
+
+
+------------|
+Containers  |
+------------|
+
+
+Starting Container : 
+--------------------
+docker ps   -> running containers
+
+# docker run react-app    -> server start running 
+
+we won't give any command while running container 
+# so we run the container as detach mode 
+
+# docker run -d react-app 
+
+# docker ps 
+
+
+create a new container with name : 
+
+# docker run -d --name blue-sky react-app 
+ 
+	it will create new container named blue-sky  by  react-app image 
+
+
+
+Viewing the Log :  
+-----------------
+
+=>  to check the error at run time while server is running 
+
+# docker logs <container_id> 
+
+make contaier continiously  producing output
+
+# docker logs -f container_id 
+
+# docker logs -n 5  -t container_id    -> last 5 lines , t - timestamps 
+
+check docker logs --help 
+
+
+Publishing Ports : 
+------------------
+
+we make a docker file  in port 3000 
+miltiple container can access same port 
+it can run into the container 
+
+# docker ps   look ports 
+
+# docker run -d -p 80:3000 --name c1 react-app 
+
+port 80 -> localhost in computer 80 
+port 3000 -> container port 3000 
+
+we open port 80 in computer localhost 
+
+docker ps  -->  see the ports 
+
+note : if port already in use it will cerate a container so remove the container
+and create a new container with same name and different port 
+
+# docker run -d -p 5000:3000 --name c1 react-app 
+
+
+Executing Commands in Runnning Commands : 
+------------------------------------------ 
+
+RUN => Create new container and run a 
+exec -> execute a command in running container 
+
+docker ps -a
+
+# docker exec <container-name> ls
+# docker exec -it <container-name> sh
+ 
+
+
+Stoping and Starting Container : 
+--------------------------------
+
+run  -> it will create and start new Container 
+start -> it will start the old container 
+
+# docker stop <container_name> 
+# docker start <container_name> 
+
+Removing Container : 
+--------------------
+
+docker ps 
+docker ps -a
+
+# docker rm <cont_id>  | docker rm <cont_id> -f    force to delete the container
+
+
+Containers File System : 
+-------------------------
+
+run mutiple container     and create different files  
+# check each container isolated from other container 
+
+there is no link form  one container to another container 
+
+
+# if the delete the container the entire  file system  deleted from that container
+
+# we presiste the data using volumes 
+
+
+Presist Data using Volumes : 
+-----------------------------
+
+volume is a storage outside of containers  it can be  a directory on host or
+some where on ....
+
+# docker volume     -> see options are present  
+
+# docker volume  create app-data 
+
+# docker volume  inspect  app-data 
+
+	you see the driver : local   it means host 
+	MountPoint is refer to volume
+
+incase if you wont create  a volume  directly execute command it will create
+a volume and path directly in run time 
+
+# docker run -d -p 4000:3000 -v app-data:/app/data  react-app 
+
+-d =  run background 
+-p =  port   
+4000 = localhost port
+3000 =  dockerhost port
+-v  = volume  store data 
+app-data =  volume name
+/app/data =  location to store data 
+react-app = image name
+
+
+we get one random id 
+
+# docker exec -it <id_3digit> sh 
+
+cd data 
+
+echo data > data.txt   -> permission Denied 
+
+cd .. 
+
+check the permissions of data folder      root user can write a file not others , groups
+
+in docker file after WORKDIR /app 
+RUN mkdir data    ->  it will automatically give the right permission for user
+
+
+rebuild image 
+
+# docker rm old_container
+
+# docker run -d -p 5000:3000 -v app-data:/app/data  react-app 
+
+# app/data /       echo data > data.txt 
+
+# exit 
+
+# docker rm <remove_current_container>
+
+# after you run the same command in same port it will persist the data in Host 
+
+
+Copying files between the Host and Containers : 
+------------------------------------------------
+
+copy log.txt file in to host 
+
+host refers to  roject directory in vs code 
+
+
+# docker ps   look running container 
+
+docker ps -a 
+docker start  <container_id>  to start container 
+
+
+# docker exec -it <container_id> sh 
+
+# echo hello > log.txt 
+
+# exit
+in local computer :     docker cp source : destination 
+
+command execute outside of container 
+
+# docker cp <container_id> :/app/log.txt  .  
+
+. refers to project directory 
+
+execute the command to look in to the directory 
+
+
+
+local file copying  into Container : 
+------------------------------------
+# docker cp <source>:<destination>   
+
+in project directory 
+
+# echo sample > sample.txt 
+
+docker cp sample.txt 39eb38da6d03:/app/
+
+# docker cp sample.txt  <container_id>:/app/ 
+
+
+
+Sharing a Source with a Container :   publishing the Application Changes 
+-----------------------------------
+
+For each and every time we change the code and rebuild the image and execute 
+the image it will take more time 
+
+so we mapping or Binding  the Directory and  Host 
+
+HOST                             CONTAINER
+/project  ------------------>   /app
+
+# docker run -d -p 5001:3000 -v  $(pwd):/app  react-app
+
+# it will run and generate container id  
+
+react-app is the image name 
+
+app folder containing all the project data 
+
+pwd refers to take the current project directory 
+
+# docker logs -f <container_id> 
+
+
+check local host 5001 
+
+==============================================================================
+
+
+---------------|
+Docker Compose |   -->>  Composing Multi Container Application 
+---------------|
+
+
+Cleaning Up our Workspace : 
+---------------------------
+
+docker image  && docker ps
+
+docker image ls -q
+
+docker ps -a 
+
+it will remove all containers in docker 
+# docker container rm -f $(docker container ls -q -a) 
+
+it will remove all images in docker 
+# docker image rm -f $(docker image ls -q ) 
+
+
+setting up both Frontend and Backend : 
+
+docker compose up   -> it will download all dependencies 
+
+
+
+JSON AND YAML FROMAT : 
+----------------------
+
+
+{
+"name" :"Hello sanjay" ,
+"prince":true,
+"weight":50,
+"tags":['software','hardware'],
+'author':{
+	"location":"chennai",
+	'alive':true,
+
+}
+
+yaml or yml 
+---   -> indicate hirerachy   it is indendedntation 
+name : hello sanjay 
+tags :
+  -software
+  -devops
+author:
+  location:chennai
+  alive:false
+
+
+Creating a Compose File : 
+--------------------------
+
+create docker-compose.yml file
+
+version: "3.8"
+
+services:           web,api ,db   ->any name you can use 
+  web:
+    build: ./frontend
+    ports:
+      - 3000:3000
+  api:
+    build: ./backend
+    ports:
+      - 3002:3002
+    environment:
+      DB_URL : mongodb://db/vidly 
+      # - DB_URL = mongodb://db/vidly
+      #  ://db    refer to the batabase lable name     
+
+  db:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017 
+    volumes:
+      - vidly:/data/db
+      # app-name : directory inside the container      /data/db   is the default location mongodb store data 
+      # TO write the mongodb data tempreory file system in to the container  we use Volumes 
+
+volumes:
+     vidly:
+
+     # default syntax    vidly : 
+
+
+Building Images : 
+------------------
+# docker compose               to see options 
+
+# docker compose build --help 
+
+To build a image 
+
+#  docker compose build 
+
+# docker image ls 
+	mongo come from docker hub 
+
+	see the time  a hour ago   like that 
+	because it get the from caches 
+  
+
+so we complety rebuild the images : 
+# docker  compose build --no-cache
+# docker images
+
+
+Starting and Stoping Applications : 
+-----------------------------------
+
+
+# docker compose up --help
+
+# docker compose up -d   -> start the container
+ -d detach  - run in background 
+
+# docker compose up --build 
+if we not create a image it will automatically create a image and start container
+
+# docker compose ps 
+
+# docker compose  ps  -a 
+  you see finally end with 1 --> we can create a multiple container from same image 
+
+
+Stop Container : 
+-----------------
+
+# docker compose down 
+ it will stop and remove the container 
+
+# docker compose ps -a 
+  but the images are still in the same area   next time you start the application 
+it will start very quickly 
+
+Docker Networking :
+-------------------
+
+we run docker compose it will automatically create  network and add the containter
+on the network 
+# docker compose -d up 
+
+# docker network ls  
+     last one  <folder-name_default>   bridge    
+	this  network contains three hosts     web , api ,db 
+
+
+# docker ps 
+
+	1513da287036  mongo:4.0-xenial
+	e08a12101877  vidly-api
+	64f0d9e49c89  vidly-web
+
+ vidly-api denoted to backend       
+
+# docker exec -it e08 sh 
+
+# ping api     -> permisiion error  login with root 
+
+# docker exec -it e08 sh -u root 
+
+
+docker comes from embedded  DNS server  that contains  names and ip of the 
+Container  . inside each  container containes DNS resolver  . that DNS resover 
+talks to  the Dns server it find ip address of the traget Container  
+
+
+this Dns resolver ask to the Dns server ehat is the api of the Container 
+and the Dns server returns the  ip address to the Dns resvolver 
+
+# ifconfig     to see ip of the Container 
+
+go to mongodb compass , connect to host , go to vidly 
+
+
+
+Viewing Logs : 
+---------------
+
+
+# docker compose logs   -> to all container logs 
+ 
+docker compose logs --help 
+
+# docker compose -f <container_id>
+
+
+Publishing Changes : 
+---------------------
+
+
+services:
+  web:
+    build: ./frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app           -> frontend folder connect into container app folder 
+  api:
+    build: ./backend
+    ports:
+      - 3002:3002
+    environment:
+      DB_URL : mongodb://db/vidly 
+      # - DB_URL = mongodb://db/vidly
+      #  ://db    refer to the batabase lable name     
+    volumes:
+      - ./backend:/app
+
+
+
+# nodemon not found   -> got to backend folder    -> npm i   or npm install 
+
+# react script not found  go to frontend folder  -> npm install or npm i
+
+#  permission denied, mkdir '/app/node_modules/.cache'  while runnign frontend
+
+give write permission to others in node module 
+
+# chmod o+w node_modules
+
+
+Migrating the DataBase : 
+-------------------------
+package.json file under  "devDependencies"    there is lot of dependencies 
+
+# migrate-mongo  up 
+
+or 
+in package.json  -> scripts 
+# npm run db:up
+
+dockerfile in backend 
+in api backend add this 
+# command: ./wait-for db:27017 &&  migrate-mongo up && npm start 
+
+google it wait for container script 
+
+docker compose down 
+
+docker volume ls
+
+docker volume rm ....
+
+docker compose up 
+
+
+
+
+
+Running Tests : 
+----------------
+
+# cd frontend 
+
+# npm test 
+
+test with inside a container : 
+
+web:
+    build: ./frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+  web-tests:
+    image: vidly_web
+    volumes:
+      - ./frontend:/app
+    command: npm test
+
+
+===============================================================================
+
+
+------------|
+Deployment  |
+------------| 
+
+
+
+Deployment Options : 
+---------------------
+
+# Single Host Deployment     
+problem -> server goes offline we cannot access application
+	   server is overloaded  single server cannot handle 
+# SOLUTION : -> use CLUSTERS 
+	Docker swarm 
+	kubernetes 
+
+
+# Cluster Deployment      group of servers 
+
+
+Getting a Virtual Private Server : 
+-----------------------------------
+Digital Ocean 
+Google Cloud Platform 
+Microsoft Azure 
+Amazon Web Service 
+
+Installing Docker Machine :
+-----------------------------
+
+Docker machine talk to the Docker Engine in the server   execute a docker commands
+in terminal  and docker command sends in to the server 
+
+
+$ curl -L https://github.com/docker/machine/releases/download/v0.16.2/docker-machine-`uname -s`-`uname -m` >/tmp/docker-machine &&
+    chmod +x /tmp/docker-machine &&
+    sudo cp /tmp/docker-machine /usr/local/bin/docker-machine
+
+
+Provisioning a Host : 
+---------------------
+
+docs.docker.com/machine/drivers/
+
+select the DigitalOcean 
+
+
+docker -machine create \
+--driver digitalocean \
+--digitalocean-access-token  ....
+.... check in google 
+
+you create a acccount and copy aci token and paste it 
+
+it  create  a new virtual machine and install docker in the virtual machine 
+
+ 
+Connecting To Host : 
+----------------------
+
+# docker machine ls 
+
+# docker machine ssh <name> 
+
+Defining Production Configuration : 
+------------------------------------
+
+create new file
+#  docker-compose.prod.yaml 
+
+
+
+version: "3.8"
+
+services:
+  web:
+    build: ./frontend
+    ports:
+      - 80:3000
+    restart : unless-stopped
+  api:
+    build: ./backend
+    ports:
+      - 3001:3001
+    restart : unless-stopped
+    environment:
+      DB_URL : mongodb://db/vidly 
+    command: ./docker-entrypoint.sh
+  db:
+    image: mongo:4.0-xenial
+    ports:
+      - 27017:27017 
+    volumes:
+      - vidly:/data/db
+    restart : unless-stopped
+volumes:
+     vidly:
+
+
+
+Reducing the Image Size : 
+-------------------------
+
+
+
+
+
+
+
+
